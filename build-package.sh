@@ -18,7 +18,7 @@ else
 	export TERMUX_BUILD_PACKAGE_CALL_DEPTH=$((TERMUX_BUILD_PACKAGE_CALL_DEPTH+1))
 fi
 
-set -e -o pipefail -u
+set -e -E -o pipefail -u
 
 cd "$(realpath "$(dirname "$0")")"
 TERMUX_SCRIPTDIR=$(pwd)
@@ -63,6 +63,10 @@ export TERMUX_REPO_PKG_FORMAT=$(jq --raw-output '.pkg_format // "debian"' ${TERM
 # Special variable for internal use. It forces script to ignore
 # lock file.
 : "${TERMUX_BUILD_IGNORE_LOCK:=false}"
+
+# Utility code to track errors in buildsystem.
+# shellcheck source=scripts/build/termux_setup_self_debug.shh
+source "$TERMUX_SCRIPTDIR/scripts/build/termux_setup_self_debug.sh"
 
 # Utility function to log an error message and exit with an error code.
 # shellcheck source=scripts/build/termux_error_exit.sh
